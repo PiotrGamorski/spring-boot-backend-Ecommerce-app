@@ -1,5 +1,6 @@
 package com.luv2code.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,5 +25,6 @@ public class Country {
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "country")
+    @JsonIgnore // will ignore the states when "http://localhost:8080/api/countries"
     private List<State> states;
 }
