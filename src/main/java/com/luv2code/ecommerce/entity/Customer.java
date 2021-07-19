@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name ="customer")
@@ -24,4 +26,18 @@ public class Customer {
 
     @Column(name = "email")
     private String email;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private Set<Order> orders = new HashSet<>();
+
+    public void add(Order order){
+        if(order != null){
+            if(this.orders == null){
+                this.orders = new HashSet<>();
+            }
+
+            this.orders.add(order);
+            order.setCustomer(this);
+        }
+    }
 }

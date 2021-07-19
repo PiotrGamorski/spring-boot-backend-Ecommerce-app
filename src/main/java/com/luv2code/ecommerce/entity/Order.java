@@ -8,6 +8,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "order")
@@ -40,6 +42,29 @@ public class Order {
     @UpdateTimestamp
     private Date lastUpdate;
 
-    @Column(name = "customer")
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "shipping_address_id", referencedColumnName = "id")
+    private Address shippingAddress;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "billing_address_id", referencedColumnName = "id")
+    private Address billingAddress;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
+    private Set<OrderItem> orderItems = new HashSet<>();
+
+    public void add(OrderItem item){
+        if(item != null) {
+            if(this.orderItems == null) {
+                this.orderItems = new HashSet<>();
+            }
+
+            this.orderItems.add(item);
+            item.setOrder(this);
+        }
+    }
 }
