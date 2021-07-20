@@ -27,23 +27,29 @@ public class CheckoutServiceImpl implements CheckoutService{
     @Transactional
     public PurchaseResponse placeOrder(Purchase purchase) {
 
-        // retrieve the order info from dto
+        // ------------------ Prepare order to populate customer with the order ------------------
+
+        // retrieve the order info from JSON to dto, and from dto in here
         Order order = purchase.getOrder();
 
-        // generate tracking number
+        // generate tracking number for the order and set it
         String orderTrackingNumber = generateOrderTrackingNumber();
         order.setOrderTrackingNumber(orderTrackingNumber);
 
         // populate order with orderItems
         Set<OrderItem> orderItems = purchase.getOrderItems();
+        // SUPPLY orderItems FROM ORDER WITH EVERY ORDER ITEM PROVIDED FROM JSON
         orderItems.forEach(order::add);
 
         // populate order with shipping and billing address
         order.setShippingAddress(purchase.getShippingAddress());
         order.setBillingAddress(purchase.getBillingAddress());
 
-        // populate customer with order
+        // ------------------ Order prepared ------------------
+
+        // populate customer with the order
         Customer customer = purchase.getCustomer();
+        // SUPPLY THE CUSTOMER WITH THE PREPARED ORDER
         customer.add(order);
 
         // save to the database
