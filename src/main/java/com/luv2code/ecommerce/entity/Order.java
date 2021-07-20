@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 @Getter
 @Setter
 public class Order {
@@ -34,11 +34,11 @@ public class Order {
     @Column(name = "status")
     private String status;
 
-    @Column(name = "data_created")
+    @Column(name = "date_created")
     @CreationTimestamp
-    private Date dataCreated;
+    private Date dateCreated;
 
-    @Column(name = "last_update")
+    @Column(name = "last_updated")
     @UpdateTimestamp
     private Date lastUpdate;
 
